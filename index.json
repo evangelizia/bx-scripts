@@ -1,4 +1,17 @@
 {
   "kind": "bots",
-  "scripts": []
+  "scripts": [
+    {
+      "hash": "471915dbfb555a5030971ba4eca2b5f21ccffcc7d9290a00df90828b45bc24d7",
+      "name": "Hunt",
+      "desc": "Kills every monster in the area, one at a time, until none are left.",
+      "tags": [
+        "combat",
+        "demo"
+      ],
+      "author": "Beatrix",
+      "size": 575,
+      "file": "scripts/bots/hunt.lua"
+    }
+  ]
 }
