@@ -150,13 +150,51 @@ function lineAt(src: string, offset: number): number {
   return src.slice(0, offset).split('\n').length
 }
 
+/** Names a script binds to a table the engine hands it, so its fields can be
+ * checked: `local me = Game.me`, `local foes = Game.enemies()`, and the loop
+ * variable of `for _, one in ipairs(foes)`. */
+function bindings(body: string, api: Api): Map<string, string> {
+  const lists = new Map<string, string>()
+  const known = new Map<string, string>()
+  for (const one of body.matchAll(/\blocal\s+([A-Za-z_]\w*)\s*=\s*Game\.me\b/g)) {
+    known.set(one[1], 'Game.me')
+  }
+  for (const one of body.matchAll(/\blocal\s+([A-Za-z_]\w*)\s*=\s*(Game\.(?:enemies|players))\s*\(/g)) {
+    lists.set(one[1], `${one[2]}()`)
+  }
+  for (const one of body.matchAll(/\blocal\s+([A-Za-z_]\w*)\s*=\s*(Game\.(?:enemies|players))\s*\(\s*\)\s*\[/g)) {
+    known.set(one[1], `${one[2]}()`)
+  }
+  for (const one of body.matchAll(
+    /\bfor\s+(?:[A-Za-z_]\w*\s*,\s*)?([A-Za-z_]\w*)\s+in\s+ipairs\s*\(\s*([A-Za-z_]\w*|Game\.(?:enemies|players)\s*\(\s*\))\s*\)/g,
+  )) {
+    // The group already carries `()` when the list is written out in the loop.
+    const list = one[2].startsWith('Game.')
+      ? one[2].replace(/\s+/g, '')
+      : lists.get(one[2])
+    if (list && api.values[list]) known.set(one[1], list)
+  }
+  return known
+}
+
 /** Every dotted name used, called or read, checked against what the engine has. */
 function apiProblems(src: string, api: Api, kind: string): string[] {
   const body = clean(src)
   const problems: string[] = []
+  const bound = bindings(body, api)
   const name = /\b([A-Za-z_]\w*)((?:\s*\.\s*[A-Za-z_]\w*)*)/g
   for (let match = name.exec(body); match; match = name.exec(body)) {
     const dotted = match[1] + match[2].replace(/\s+/g, '')
+    // A bound table's fields are checked too: `me.hp_max`, `one.name`.
+    const dot = dotted.indexOf('.')
+    const table = dot > 0 ? bound.get(dotted.slice(0, dot)) : undefined
+    if (table) {
+      const field = dotted.slice(dot + 1).split('.')[0]
+      if (!api.values[table]?.includes(field)) {
+        problems.push(`${lineAt(src, match.index)}: ${dotted} is not part of ${table}`)
+      }
+      continue
+    }
     // Only names the engine owns: locals and the script's own functions pass.
     if (!dotted.startsWith('Game') && !dotted.startsWith('Combat') && !api.calls[dotted]) continue
     const after = body.slice(match.index + match[0].length)
@@ -186,9 +224,9 @@ function apiProblems(src: string, api: Api, kind: string): string[] {
       continue
     }
     if (api.calls[dotted]) continue
-    const dot = dotted.lastIndexOf('.')
-    const owner = dotted.slice(0, dot)
-    const key = dotted.slice(dot + 1)
+    const last = dotted.lastIndexOf('.')
+    const owner = dotted.slice(0, last)
+    const key = dotted.slice(last + 1)
     if (!api.values[owner]?.includes(key)) {
       problems.push(`${where}: ${dotted} is not part of the ${kind} API`)
     }

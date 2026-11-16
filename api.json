@@ -33,7 +33,9 @@
     },
     "values": {
       "Game": ["area", "enemies", "kill", "map", "me", "now", "players", "travel", "walk"],
-      "Game.me": ["name", "id", "level", "hp", "hp_max", "mp", "mp_max", "cell", "pad", "x", "y", "monster", "alive"]
+      "Game.enemies()": ["id", "name", "level", "hp", "hp_max", "cell", "alive"],
+      "Game.me": ["name", "id", "level", "hp", "hp_max", "mp", "mp_max", "cell", "pad", "x", "y", "monster", "alive"],
+      "Game.players()": ["name", "id", "level", "hp", "hp_max", "mp", "mp_max", "cell", "pad", "x", "y", "monster", "alive"]
     }
   },
   "classes": {
