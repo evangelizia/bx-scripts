@@ -61,14 +61,6 @@ Asks the game to walk you to a cell, carrying the pad you name. Gives `true` whe
 
 Appends a line to `script-log`, which the app's Automation panel shows behind its `log` button.
 
-#### `log(text: string)`
-
-Appends a line to `script-log`, which the app's Automation panel shows behind its `log` button.
-
-#### `log(text: string)`
-
-Appends a line to `script-log`, which the app's Automation panel shows behind its `log` button.
-
 #### `wait(ms: number)`
 
 Stops the script for that many milliseconds. Waiting is legal in a bot script and not in a class script.
@@ -150,10 +142,6 @@ The room inside the map, which is what a fight happens in.
 
 The monsters in the room, as a fresh list of copies taken right now. Gives a list of enemies.
 
-#### `Game.kill(foe?: table)`
-
-Kills one monster, walking into reach and casting by itself. Leaves the monster out to mean the first one still alive. Gives `true` when it died, `false` when it did not.
-
 #### `Game.map()`
 
 The name of the map you are in, or an empty string before the game has said.
@@ -166,33 +154,17 @@ Seconds since this script started, as a number with a fraction.
 
 Everyone else in the room, as a fresh list of copies. Gives a list of players.
 
-#### `Game.travel(map: string)`
-
-Asks the game to travel to another map through a portal. Gives `true` when a connected game took the request.
-
-#### `Game.walk(cell: string, pad: string)`
-
-Asks the game to walk you to a cell, carrying the pad you name. Gives `true` when a connected game took the request.
-
 #### `log(text: string)`
 
 Appends a line to `script-log`, which the app's Automation panel shows behind its `log` button.
 
-#### `log(text: string)`
-
-Appends a line to `script-log`, which the app's Automation panel shows behind its `log` button.
-
-#### `log(text: string)`
-
-Appends a line to `script-log`, which the app's Automation panel shows behind its `log` button.
-
-A class script is the rotation a fight is played by. It reads the
-game and defines `tick()`, which the engine asks once every 100 ms:
-`return "a1"` casts that slot and `return nil` casts nothing. There is
-no `Combat` table and no `wait`: the engine owns the cast and the
-clock. Without a `--- class:` line of its own, a script is asked on
-whatever class is standing; with one, it is asked only while that
-class is playing, and the built-in rotation fights otherwise.
+A class script is the rotation a fight is played by. It reads the game
+and defines `tick()`, which the engine asks once every 100 ms: `return
+"a1"` casts that slot and `return nil` casts nothing. There is no
+`Combat` table, no `wait` and no `Game.kill`: the engine owns the cast,
+the clock and the fight. Without a `--- class:` line of its own, a script
+is asked on whatever class is standing; with one, it is asked only while
+that class is playing, and the built-in rotation fights otherwise.
 
 ### Tables
 
