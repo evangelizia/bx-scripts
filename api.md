@@ -49,9 +49,9 @@ Seconds since this script started, as a number with a fraction.
 
 Everyone else in the room, as a fresh list of copies. Gives a list of players.
 
-#### `Game.skills()`
+#### `Game.skill(name: string)`
 
-The action bar, as a fresh list taken right now: what each skill costs and when it was last cast, so a rotation can tell what is ready.
+One skill of the action bar by the name the game gives it, as a fresh copy taken right now, or nothing (`nil`) when the class has no such skill. Its `ready` is the engine's own answer for this tick: off cooldown and affordable.
 
 #### `Game.target()`
 
@@ -164,9 +164,9 @@ Seconds since this script started, as a number with a fraction.
 
 Everyone else in the room, as a fresh list of copies. Gives a list of players.
 
-#### `Game.skills()`
+#### `Game.skill(name: string)`
 
-The action bar, as a fresh list taken right now: what each skill costs and when it was last cast, so a rotation can tell what is ready.
+One skill of the action bar by the name the game gives it, as a fresh copy taken right now, or nothing (`nil`) when the class has no such skill. Its `ready` is the engine's own answer for this tick: off cooldown and affordable.
 
 #### `Game.target()`
 
