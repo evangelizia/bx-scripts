@@ -33,6 +33,16 @@ test('a script with no header is not listed but still runs', () => {
   expect(run.said).not.toContain('no `--- name:`')
 })
 
+test('the shipped class rotation passes, and the whole folder is checked', () => {
+  const one = check('scripts/classes/SwordMaster.lua')
+  expect(one.code).toBe(0)
+  expect(one.said).toContain('0 problems')
+
+  const all = Bun.spawnSync(['bun', 'cli/index.ts', 'check'], { cwd: root })
+  expect(all.stdout.toString()).toContain('scripts/classes/SwordMaster.lua')
+  expect(all.exitCode).toBe(0)
+})
+
 test('a class script reads and holds, and is not offered the bot actions', () => {
   const legal = check('cli/test/classes/healer/hymn.lua')
   expect(legal.said).toContain('0 problems')

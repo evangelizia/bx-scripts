@@ -49,6 +49,10 @@ Seconds since this script started, as a number with a fraction.
 
 Everyone else in the room, as a fresh list of copies. Gives a list of players.
 
+#### `Game.skills()`
+
+The action bar, as a fresh list taken right now: what each skill costs and when it was last cast, so a rotation can tell what is ready.
+
 #### `Game.target()`
 
 The monster the engine is fighting, as a copy taken right now. Nothing (`nil`) between fights.
@@ -159,6 +163,10 @@ Seconds since this script started, as a number with a fraction.
 #### `Game.players()`
 
 Everyone else in the room, as a fresh list of copies. Gives a list of players.
+
+#### `Game.skills()`
+
+The action bar, as a fresh list taken right now: what each skill costs and when it was last cast, so a rotation can tell what is ready.
 
 #### `Game.target()`
 

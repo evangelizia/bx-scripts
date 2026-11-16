@@ -11,6 +11,7 @@
       "Game.map": [0, 0],
       "Game.now": [0, 0],
       "Game.players": [0, 0],
+      "Game.skills": [0, 0],
       "Game.target": [0, 0],
       "Game.travel": [1, 1],
       "Game.walk": [2, 2],
@@ -28,6 +29,7 @@
       "Game.map": [],
       "Game.now": [],
       "Game.players": [],
+      "Game.skills": [],
       "Game.target": [],
       "Game.travel": ["string"],
       "Game.walk": ["string", "string"],
@@ -36,7 +38,7 @@
       "wait_until": ["any", "any"]
     },
     "values": {
-      "Game": ["area", "enemies", "kill", "map", "me", "now", "players", "target", "travel", "walk"],
+      "Game": ["area", "enemies", "kill", "map", "me", "now", "players", "skills", "target", "travel", "walk"],
       "Game.enemies()": ["alive", "auras", "cell", "hitting", "hp", "hp_max", "id", "level", "name", "targets"],
       "Game.me": ["alive", "auras", "cell", "hp", "hp_max", "id", "level", "monster", "mp", "mp_max", "name", "pad", "x", "y"],
       "Game.players()": ["alive", "auras", "cell", "hp", "hp_max", "id", "level", "monster", "mp", "mp_max", "name", "pad", "x", "y"]
@@ -49,6 +51,7 @@
       "Game.map": [0, 0],
       "Game.now": [0, 0],
       "Game.players": [0, 0],
+      "Game.skills": [0, 0],
       "Game.target": [0, 0],
       "log": [1, 1]
     },
@@ -58,11 +61,12 @@
       "Game.map": [],
       "Game.now": [],
       "Game.players": [],
+      "Game.skills": [],
       "Game.target": [],
       "log": ["string"]
     },
     "values": {
-      "Game": ["area", "enemies", "map", "me", "now", "players", "target"],
+      "Game": ["area", "enemies", "map", "me", "now", "players", "skills", "target"],
       "Game.enemies()": ["alive", "auras", "cell", "hitting", "hp", "hp_max", "id", "level", "name", "targets"],
       "Game.me": ["alive", "auras", "cell", "hp", "hp_max", "id", "level", "monster", "mp", "mp_max", "name", "pad", "x", "y"],
       "Game.players()": ["alive", "auras", "cell", "hp", "hp_max", "id", "level", "monster", "mp", "mp_max", "name", "pad", "x", "y"]

@@ -340,7 +340,14 @@ function index(paths: string[]): number {
 }
 
 const [command, ...rest] = process.argv.slice(2)
-const roots = rest.length > 0 ? rest : [join(ROOT, 'scripts/bots')]
+// Checking covers both kinds of script; the published index is bots only until
+// class scripts have a runner in the app.
+const roots =
+  rest.length > 0
+    ? rest
+    : command === 'index'
+      ? [join(ROOT, 'scripts/bots')]
+      : [join(ROOT, 'scripts/bots'), join(ROOT, 'scripts/classes')]
 const paths = roots.flatMap((root) => files(root))
 
 const code =
