@@ -6,7 +6,8 @@
   "scripts": {
     "check": "bun cli/index.ts check",
     "index": "bun cli/index.ts index",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "bun test"
   },
   "devDependencies": {
     "@types/bun": "latest"

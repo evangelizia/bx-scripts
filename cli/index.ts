@@ -100,6 +100,7 @@ function guessType(text: string): string | null {
   if (one === 'true' || one === 'false') return 'boolean'
   if (one === 'nil') return 'nil'
   if (one.startsWith('{')) return 'table'
+  if (/^\[=*\[/.test(one)) return 'string'
   if (one.includes('..')) return 'string'
   if (one.startsWith('#')) return 'number'
   if (/^Game\.(me|enemies|players)\b/.test(one)) return 'table'
@@ -195,8 +196,15 @@ function apiProblems(src: string, api: Api, kind: string): string[] {
       }
       continue
     }
-    // Only names the engine owns: locals and the script's own functions pass.
-    if (!dotted.startsWith('Game') && !dotted.startsWith('Combat') && !api.calls[dotted]) continue
+    // Only names the engine owns: `Game2`, locals and the script's own
+    // functions pass, and so does handing the table itself around.
+    const owned =
+      dotted === 'Game' ||
+      dotted === 'Combat' ||
+      dotted.startsWith('Game.') ||
+      dotted.startsWith('Combat.') ||
+      Boolean(api.calls[dotted])
+    if (!owned || api.values[dotted]) continue
     const after = body.slice(match.index + match[0].length)
     const called = /^\s*\(/.test(after)
     const where = `${lineAt(src, match.index)}`
@@ -216,7 +224,9 @@ function apiProblems(src: string, api: Api, kind: string): string[] {
       const wants = api.params[dotted] ?? []
       argumentSlices(body, open).forEach(([start, end], at) => {
         const want = wants[at]
-        const got = guessType(src.slice(start, end))
+        const piece = src.slice(start, end).trim()
+        // A name bound to a table is a table: `Game.kill(one)`.
+        const got = guessType(piece) ?? (bound.has(piece) ? 'table' : null)
         if (want && want !== 'any' && got && got !== want) {
           problems.push(`${where}: ${dotted} wants ${article(want)} at argument ${at + 1}, given ${article(got)}`)
         }
