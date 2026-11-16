@@ -49,6 +49,10 @@ Seconds since this script started, as a number with a fraction.
 
 Everyone else in the room, as a fresh list of copies. Gives a list of players.
 
+#### `Game.target()`
+
+The monster the engine is fighting, as a copy taken right now. Nothing (`nil`) between fights.
+
 #### `Game.travel(map: string)`
 
 Asks the game to travel to another map through a portal. Gives `true` when a connected game took the request.
@@ -106,6 +110,8 @@ The monsters in the room, as a fresh list of copies taken right now. Gives a lis
 | `cell` | string | The cell it stands on, for `Game.walk`. |
 | `alive` | boolean | Whether it was still standing when the list was taken. |
 | `auras` | table | The auras on it, by the name the game gives, each with `stacks` and `ms` left. |
+| `targets` | table | Who the game says this monster is on, by name. Empty when it is on nobody. |
+| `hitting` | boolean | Whether this monster has hit you in the last few seconds. |
 
 ### `Game.players()`
 
@@ -153,6 +159,10 @@ Seconds since this script started, as a number with a fraction.
 #### `Game.players()`
 
 Everyone else in the room, as a fresh list of copies. Gives a list of players.
+
+#### `Game.target()`
+
+The monster the engine is fighting, as a copy taken right now. Nothing (`nil`) between fights.
 
 #### `log(text: string)`
 
@@ -203,6 +213,8 @@ The monsters in the room, as a fresh list of copies taken right now. Gives a lis
 | `cell` | string | The cell it stands on, for `Game.walk`. |
 | `alive` | boolean | Whether it was still standing when the list was taken. |
 | `auras` | table | The auras on it, by the name the game gives, each with `stacks` and `ms` left. |
+| `targets` | table | Who the game says this monster is on, by name. Empty when it is on nobody. |
+| `hitting` | boolean | Whether this monster has hit you in the last few seconds. |
 
 ### `Game.players()`
 

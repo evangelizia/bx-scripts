@@ -32,3 +32,13 @@ test('a script with no header is not listed but still runs', () => {
   const run = check('cli/test/legal.lua')
   expect(run.said).not.toContain('no `--- name:`')
 })
+
+test('a class script reads and holds, and is not offered the bot actions', () => {
+  const legal = check('cli/test/classes/healer/hymn.lua')
+  expect(legal.said).toContain('0 problems')
+  expect(legal.code).toBe(0)
+
+  const acting = check('cli/test/classes/healer/acting.lua')
+  expect(acting.code).toBe(1)
+  expect(acting.said).toContain('Game.walk is not part of the class API')
+})
