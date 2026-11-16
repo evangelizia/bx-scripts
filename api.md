@@ -86,6 +86,7 @@ A live view of your character.
 | `y` | number | Vertical position on the map. |
 | `monster` | boolean | Whether this entry is a monster rather than a player. |
 | `alive` | boolean | Whether that character is still standing. |
+| `auras` | table | The auras on that character, by the name the game gives, each with `stacks` and `ms` left. |
 
 ### `Game.enemies()`
 
@@ -100,6 +101,7 @@ The monsters in the room, as a fresh list of copies taken right now. Gives a lis
 | `hp_max` | number | The most health this monster has. |
 | `cell` | string | The cell it stands on, for `Game.walk`. |
 | `alive` | boolean | Whether it was still standing when the list was taken. |
+| `auras` | table | The auras on it, by the name the game gives, each with `stacks` and `ms` left. |
 
 ### `Game.players()`
 
@@ -120,6 +122,7 @@ Everyone else in the room, as a fresh list of copies.
 | `y` | number | Vertical position on the map. |
 | `monster` | boolean | Whether this entry is a monster rather than a player. |
 | `alive` | boolean | Whether that character is still standing. |
+| `auras` | table | The auras on that character, by the name the game gives, each with `stacks` and `ms` left. |
 
 ## Classes
 
