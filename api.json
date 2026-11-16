@@ -1,24 +1,36 @@
 {
-  "kind": "bots",
-  "generated": "beatrix-rs native/script/src/lib.rs + combat.rs",
-  "calls": {
-    "wait": [1, 1],
-    "log": [1, 1],
-    "wait_until": [2, 2],
-    "Game.map": [0, 0],
-    "Game.area": [0, 0],
-    "Game.now": [0, 0],
-    "Game.players": [0, 0],
-    "Game.enemies": [0, 0],
-    "Game.walk": [2, 2],
-    "Game.travel": [1, 1],
-    "Game.kill": [0, 1],
-    "Combat.fight": [1, 2],
-    "Combat.stop": [0, 0]
+  "generated": "beatrix-rs native/script/src/lib.rs",
+  "bots": {
+    "calls": {
+      "Combat.fight": [1, 2],
+      "Combat.stop": [0, 0],
+      "Game.area": [0, 0],
+      "Game.enemies": [0, 0],
+      "Game.kill": [0, 1],
+      "Game.map": [0, 0],
+      "Game.now": [0, 0],
+      "Game.players": [0, 0],
+      "Game.travel": [1, 1],
+      "Game.walk": [2, 2],
+      "log": [1, 1],
+      "wait": [1, 1],
+      "wait_until": [2, 2]
+    },
+    "values": {
+      "Game": ["area", "enemies", "kill", "map", "me", "now", "players", "travel", "walk"],
+      "Game.me": ["name", "id", "level", "hp", "hp_max", "mp", "mp_max", "cell", "pad", "x", "y", "monster", "alive"]
+    }
   },
-  "values": {
-    "Game": ["me", "players", "enemies", "map", "area", "now", "walk", "travel", "kill"],
-    "Game.me": ["name", "id", "level", "hp", "hp_max", "mp", "mp_max", "cell", "pad", "x", "y", "monster", "alive"],
-    "Combat": ["fight", "stop"]
+  "classes": {
+    "calls": {
+      "Combat.fight": [1, 2],
+      "Combat.stop": [0, 0],
+      "log": [1, 1],
+      "wait": [1, 1],
+      "wait_until": [2, 2]
+    },
+    "values": {
+      "Combat": ["fight", "stop"]
+    }
   }
 }

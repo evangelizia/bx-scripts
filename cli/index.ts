@@ -11,7 +11,14 @@ type Api = {
 }
 
 const ROOT = new URL('..', import.meta.url).pathname
-const api: Api = JSON.parse(readFileSync(join(ROOT, 'api.json'), 'utf8'))
+const manifest: Record<string, Api> = JSON.parse(readFileSync(join(ROOT, 'api.json'), 'utf8'))
+
+/** Bots and classes are two different APIs; the folder decides which one. */
+function apiFor(path: string): { api: Api; kind: string } {
+  return path.includes('/classes/')
+    ? { api: manifest.classes, kind: 'class' }
+    : { api: manifest.bots, kind: 'bot' }
+}
 
 /** Every `.lua` under a folder, in path order so runs and indexes agree. */
 function files(under: string): string[] {
@@ -104,7 +111,7 @@ function lineAt(src: string, offset: number): number {
 }
 
 /** Every dotted name used, called or read, checked against what the engine has. */
-function apiProblems(src: string): string[] {
+function apiProblems(src: string, api: Api, kind: string): string[] {
   const body = clean(src)
   const problems: string[] = []
   const name = /\b(Game|Combat)((?:\s*\.\s*[A-Za-z_]\w*)*)/g
@@ -118,7 +125,7 @@ function apiProblems(src: string): string[] {
       const count = argumentsAt(body, open)
       const limits = api.calls[dotted]
       if (!limits) {
-        problems.push(`${where}: ${dotted} is not part of the bot API`)
+        problems.push(`${where}: ${dotted} is not part of the ${kind} API`)
         continue
       }
       if (count < limits[0] || count > limits[1]) {
@@ -132,7 +139,7 @@ function apiProblems(src: string): string[] {
     const owner = dotted.slice(0, dot)
     const key = dotted.slice(dot + 1)
     if (!api.values[owner]?.includes(key)) {
-      problems.push(`${where}: ${dotted} is not part of the bot API`)
+      problems.push(`${where}: ${dotted} is not part of the ${kind} API`)
     }
   }
   return problems
@@ -182,9 +189,10 @@ async function check(paths: string[]): Promise<number> {
     const src = bytes.toString('utf8')
     const shown = path.startsWith(ROOT) ? relative(ROOT, path) : path
     const { fields } = header(src)
+    const spec = apiFor(path)
     const found = [
       ...headerProblems(fields).map((one) => `${shown}: ${one}`),
-      ...apiProblems(src).map((one) => `${shown}:${one}`),
+      ...apiProblems(src, spec.api, spec.kind).map((one) => `${shown}:${one}`),
     ]
     const broken = await syntaxProblem(lua, src, path.split('/').pop() ?? shown)
     if (broken) found.push(`${shown}:${broken}`)
@@ -226,7 +234,8 @@ function index(paths: string[]): number {
     })
     .filter((one) => one !== null)
     .sort((a, b) => a.name.localeCompare(b.name) || a.file.localeCompare(b.file))
-  writeFileSync(join(ROOT, 'index.json'), `${JSON.stringify({ kind: api.kind, scripts }, null, 2)}\n`)
+  // Bots only for now; classes get their own index when they have an engine.
+  writeFileSync(join(ROOT, 'index.json'), `${JSON.stringify({ kind: 'bots', scripts }, null, 2)}\n`)
   console.log(`indexed ${scripts.length} scripts`)
   return 0
 }
