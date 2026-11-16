@@ -3,6 +3,7 @@
   "bots": {
     "calls": {
       "Combat.fight": [1, 2],
+      "Combat.skill": [1, 1],
       "Combat.stop": [0, 0],
       "Game.area": [0, 0],
       "Game.enemies": [0, 0],
@@ -18,6 +19,7 @@
     },
     "params": {
       "Combat.fight": ["table", "number"],
+      "Combat.skill": ["string"],
       "Combat.stop": [],
       "Game.area": [],
       "Game.enemies": [],
@@ -41,6 +43,7 @@
   "classes": {
     "calls": {
       "Combat.fight": [1, 2],
+      "Combat.skill": [1, 1],
       "Combat.stop": [0, 0],
       "log": [1, 1],
       "wait": [1, 1],
@@ -48,13 +51,14 @@
     },
     "params": {
       "Combat.fight": ["table", "number"],
+      "Combat.skill": ["string"],
       "Combat.stop": [],
       "log": ["string"],
       "wait": ["number"],
       "wait_until": ["any", "any"]
     },
     "values": {
-      "Combat": ["fight", "stop"]
+      "Combat": ["fight", "skill", "stop"]
     }
   }
 }

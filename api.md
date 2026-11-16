@@ -17,6 +17,10 @@ Scripts in `scripts/bots`.
 
 The same kill with the deadline in the script's hands. Gives `true` when the monster died, `false` on the deadline.
 
+#### `Combat.skill(slot: string)`
+
+Casts one slot of the action bar by the ref the game gives it (`aa`, `a1`, and so on). A skill aimed at a monster goes to the fight's monster or the first one alive; one aimed at a friend goes to you. Gives `true` when the frame went out, `false` on an unknown slot, a cooldown, a cost the mana cannot pay, or nothing to aim at.
+
 #### `Combat.stop()`
 
 Stops the engine's rotation, leaving the fight.
@@ -133,6 +137,10 @@ Scripts in `scripts/classes`.
 #### `Combat.fight(foe: table, seconds?: number)`
 
 The same kill with the deadline in the script's hands. Gives `true` when the monster died, `false` on the deadline.
+
+#### `Combat.skill(slot: string)`
+
+Casts one slot of the action bar by the ref the game gives it (`aa`, `a1`, and so on). A skill aimed at a monster goes to the fight's monster or the first one alive; one aimed at a friend goes to you. Gives `true` when the frame went out, `false` on an unknown slot, a cooldown, a cost the mana cannot pay, or nothing to aim at.
 
 #### `Combat.stop()`
 
