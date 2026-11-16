@@ -1,5 +1,5 @@
 {
-  "generated": "beatrix-rs native/script/src/lib.rs",
+  "generated": "Beatrix",
   "bots": {
     "calls": {
       "Combat.fight": [1, 2],

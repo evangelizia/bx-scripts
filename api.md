@@ -1,8 +1,7 @@
 # Script API
 
-Generated from the Beatrix engine. Do not edit by hand: change the
-engine, then run `cargo run -p script --bin api_dump -- md` in its
-repository and copy the file here.
+Written whole by the generator that also writes `api.json`. Do not edit by
+hand: change what it reads, then let it write this file again.
 
 A script may call what is written below and nothing else. `bx check`
 rejects an unknown name, a wrong argument count, an argument of the
