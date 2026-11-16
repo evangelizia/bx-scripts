@@ -1,7 +1,7 @@
 {
-  "kind": "bots",
   "scripts": [
     {
+      "kind": "bot",
       "hash": "471915dbfb555a5030971ba4eca2b5f21ccffcc7d9290a00df90828b45bc24d7",
       "name": "Hunt",
       "desc": "Kills every monster in the area, one at a time, until none are left.",
@@ -12,6 +12,22 @@
       "author": "Beatrix",
       "size": 575,
       "file": "scripts/bots/hunt.lua"
+    },
+    {
+      "kind": "class",
+      "hash": "9c00eff6e9eb1da83f323b5852f06c89ad723be5fa9dd79141f8aff1bc45de1d",
+      "name": "SwordMaster",
+      "desc": "Uke Negashi for permanent Evasion, Nukiuchi and Sever for guaranteed Vitals, Spinning Dragon and Precise Cut, Bladefury for crit, Nukitsuke filler.",
+      "tags": [
+        "dps",
+        "dodge",
+        "melee",
+        "solo",
+        "legion"
+      ],
+      "author": "Beatrix",
+      "size": 2732,
+      "file": "scripts/classes/SwordMaster.lua"
     }
   ]
 }

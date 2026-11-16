@@ -319,6 +319,8 @@ function index(paths: string[]): number {
         return null
       }
       return {
+        // Which engine runs it, so an installer knows where the file belongs.
+        kind: path.includes('/classes/') ? 'class' : 'bot',
         hash: hash(bytes),
         name: fields.name,
         desc: fields.desc,
@@ -333,21 +335,16 @@ function index(paths: string[]): number {
     })
     .filter((one) => one !== null)
     .sort((a, b) => a.name.localeCompare(b.name) || a.file.localeCompare(b.file))
-  // Bots only for now; classes get their own index when they have an engine.
-  writeFileSync(join(ROOT, 'index.json'), `${JSON.stringify({ kind: 'bots', scripts }, null, 2)}\n`)
+  writeFileSync(join(ROOT, 'index.json'), `${JSON.stringify({ scripts }, null, 2)}\n`)
   console.log(`indexed ${scripts.length} scripts`)
   return 0
 }
 
 const [command, ...rest] = process.argv.slice(2)
-// Checking covers both kinds of script; the published index is bots only until
-// class scripts have a runner in the app.
+// Both kinds of script, checked and indexed: a class script is installed the
+// same way a bot script is.
 const roots =
-  rest.length > 0
-    ? rest
-    : command === 'index'
-      ? [join(ROOT, 'scripts/bots')]
-      : [join(ROOT, 'scripts/bots'), join(ROOT, 'scripts/classes')]
+  rest.length > 0 ? rest : [join(ROOT, 'scripts/bots'), join(ROOT, 'scripts/classes')]
 const paths = roots.flatMap((root) => files(root))
 
 const code =

@@ -1,4 +1,6 @@
 import { expect, test } from 'bun:test'
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
 
 const root = new URL('..', import.meta.url).pathname
 
@@ -51,4 +53,22 @@ test('a class script reads and holds, and is not offered the bot actions', () =>
   const acting = check('cli/test/classes/healer/acting.lua')
   expect(acting.code).toBe(1)
   expect(acting.said).toContain('Game.walk is not part of the class API')
+})
+
+test('the index says which engine runs each script, and where it lives', () => {
+  Bun.spawnSync(['bun', 'cli/index.ts', 'index'], { cwd: root })
+  const listed = JSON.parse(readFileSync(join(root, 'index.json'), 'utf8')).scripts as {
+    kind: string
+    file: string
+    hash: string
+    name: string
+  }[]
+  const bots = listed.filter((one) => one.kind === 'bot')
+  const classes = listed.filter((one) => one.kind === 'class')
+  expect(bots.length).toBeGreaterThan(0)
+  expect(classes.length).toBeGreaterThan(0)
+  for (const one of listed) {
+    expect(one.file.startsWith(`scripts/${one.kind === 'bot' ? 'bots' : 'classes'}/`)).toBe(true)
+    expect(one.hash).toHaveLength(64)
+  }
 })
