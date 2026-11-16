@@ -14,6 +14,8 @@
       "Game.travel": [1, 1],
       "Game.walk": [2, 2],
       "log": [1, 1],
+      "log": [1, 1],
+      "log": [1, 1],
       "wait": [1, 1],
       "wait_until": [2, 2]
     },
@@ -30,6 +32,8 @@
       "Game.travel": ["string"],
       "Game.walk": ["string", "string"],
       "log": ["string"],
+      "log": ["string"],
+      "log": ["string"],
       "wait": ["number"],
       "wait_until": ["any", "any"]
     },
@@ -42,23 +46,36 @@
   },
   "classes": {
     "calls": {
-      "Combat.fight": [1, 2],
-      "Combat.skill": [1, 1],
-      "Combat.stop": [0, 0],
+      "Game.area": [0, 0],
+      "Game.enemies": [0, 0],
+      "Game.kill": [0, 1],
+      "Game.map": [0, 0],
+      "Game.now": [0, 0],
+      "Game.players": [0, 0],
+      "Game.travel": [1, 1],
+      "Game.walk": [2, 2],
       "log": [1, 1],
-      "wait": [1, 1],
-      "wait_until": [2, 2]
+      "log": [1, 1],
+      "log": [1, 1]
     },
     "params": {
-      "Combat.fight": ["table", "number"],
-      "Combat.skill": ["string"],
-      "Combat.stop": [],
+      "Game.area": [],
+      "Game.enemies": [],
+      "Game.kill": ["table"],
+      "Game.map": [],
+      "Game.now": [],
+      "Game.players": [],
+      "Game.travel": ["string"],
+      "Game.walk": ["string", "string"],
       "log": ["string"],
-      "wait": ["number"],
-      "wait_until": ["any", "any"]
+      "log": ["string"],
+      "log": ["string"]
     },
     "values": {
-      "Combat": ["fight", "skill", "stop"]
+      "Game": ["area", "enemies", "kill", "map", "me", "now", "players", "travel", "walk"],
+      "Game.enemies()": ["alive", "auras", "cell", "hp", "hp_max", "id", "level", "name"],
+      "Game.me": ["alive", "auras", "cell", "hp", "hp_max", "id", "level", "monster", "mp", "mp_max", "name", "pad", "x", "y"],
+      "Game.players()": ["alive", "auras", "cell", "hp", "hp_max", "id", "level", "monster", "mp", "mp_max", "name", "pad", "x", "y"]
     }
   }
 }
