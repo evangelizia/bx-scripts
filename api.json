@@ -16,6 +16,21 @@
       "wait": [1, 1],
       "wait_until": [2, 2]
     },
+    "params": {
+      "Combat.fight": ["table", "number"],
+      "Combat.stop": [],
+      "Game.area": [],
+      "Game.enemies": [],
+      "Game.kill": ["table"],
+      "Game.map": [],
+      "Game.now": [],
+      "Game.players": [],
+      "Game.travel": ["string"],
+      "Game.walk": ["string", "string"],
+      "log": ["string"],
+      "wait": ["number"],
+      "wait_until": ["any", "any"]
+    },
     "values": {
       "Game": ["area", "enemies", "kill", "map", "me", "now", "players", "travel", "walk"],
       "Game.me": ["name", "id", "level", "hp", "hp_max", "mp", "mp_max", "cell", "pad", "x", "y", "monster", "alive"]
@@ -28,6 +43,13 @@
       "log": [1, 1],
       "wait": [1, 1],
       "wait_until": [2, 2]
+    },
+    "params": {
+      "Combat.fight": ["table", "number"],
+      "Combat.stop": [],
+      "log": ["string"],
+      "wait": ["number"],
+      "wait_until": ["any", "any"]
     },
     "values": {
       "Combat": ["fight", "stop"]

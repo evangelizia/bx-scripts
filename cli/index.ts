@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto'
-import { readFileSync, writeFileSync, readdirSync } from 'node:fs'
+import { readFileSync, writeFileSync, readdirSync, statSync } from 'node:fs'
 import { join, relative } from 'node:path'
 
 /** A call takes between `[0]` and `[1]` arguments. */
@@ -7,6 +7,7 @@ type Call = [number, number]
 
 type Api = {
   calls: Record<string, Call>
+  params: Record<string, string[]>
   values: Record<string, string[]>
 }
 
@@ -22,6 +23,7 @@ function apiFor(path: string): { api: Api; kind: string } {
 
 /** Every `.lua` under a folder, in path order so runs and indexes agree. */
 function files(under: string): string[] {
+  if (!statSync(under).isDirectory()) return under.endsWith('.lua') ? [under] : []
   const out: string[] = []
   for (const entry of readdirSync(under, { withFileTypes: true })) {
     const path = join(under, entry.name)
@@ -89,7 +91,22 @@ function header(src: string): { fields: Record<string, string>; first: number } 
   return { fields, first: at }
 }
 
-/** Arguments at the top level of the call whose `(` is at `open`. */
+/** The Lua type of an argument, when the argument says it plainly. */
+function guessType(text: string): string | null {
+  const one = text.trim()
+  if (!one) return null
+  if (/^(['"]).*\1$/s.test(one)) return 'string'
+  if (/^-?\d+(\.\d+)?([eE][-+]?\d+)?$/.test(one)) return 'number'
+  if (one === 'true' || one === 'false') return 'boolean'
+  if (one === 'nil') return 'nil'
+  if (one.startsWith('{')) return 'table'
+  if (one.includes('..')) return 'string'
+  if (one.startsWith('#')) return 'number'
+  if (/^Game\.(me|enemies|players)\b/.test(one)) return 'table'
+  return null
+}
+
+/** Where each top-level argument of the call whose `(` is at `open` starts and ends. */
 function argumentsAt(src: string, open: number): number {
   let depth = 0
   let count = 0
@@ -106,6 +123,29 @@ function argumentsAt(src: string, open: number): number {
   return filled ? count + 1 : 0
 }
 
+function argumentSlices(src: string, open: number): Array<[number, number]> {
+  const out: Array<[number, number]> = []
+  let depth = 0
+  let start = open + 1
+  for (let at = open + 1; at < src.length; at += 1) {
+    const ch = src[at]
+    if (ch === '(' || ch === '{' || ch === '[') depth += 1
+    else if (ch === ')' && depth === 0) {
+      if (src.slice(start, at).trim()) out.push([start, at])
+      return out
+    } else if (ch === ')' || ch === '}' || ch === ']') depth -= 1
+    else if (ch === ',' && depth === 0) {
+      out.push([start, at])
+      start = at + 1
+    }
+  }
+  return out
+}
+
+function article(type: string): string {
+  return type === 'any' ? type : `${/^[aeiou]/.test(type) ? 'an' : 'a'} ${type}`
+}
+
 function lineAt(src: string, offset: number): number {
   return src.slice(0, offset).split('\n').length
 }
@@ -114,9 +154,11 @@ function lineAt(src: string, offset: number): number {
 function apiProblems(src: string, api: Api, kind: string): string[] {
   const body = clean(src)
   const problems: string[] = []
-  const name = /\b(Game|Combat)((?:\s*\.\s*[A-Za-z_]\w*)*)/g
+  const name = /\b([A-Za-z_]\w*)((?:\s*\.\s*[A-Za-z_]\w*)*)/g
   for (let match = name.exec(body); match; match = name.exec(body)) {
     const dotted = match[1] + match[2].replace(/\s+/g, '')
+    // Only names the engine owns: locals and the script's own functions pass.
+    if (!dotted.startsWith('Game') && !dotted.startsWith('Combat') && !api.calls[dotted]) continue
     const after = body.slice(match.index + match[0].length)
     const called = /^\s*\(/.test(after)
     const where = `${lineAt(src, match.index)}`
@@ -131,7 +173,16 @@ function apiProblems(src: string, api: Api, kind: string): string[] {
       if (count < limits[0] || count > limits[1]) {
         const want = limits[0] === limits[1] ? `${limits[0]}` : `${limits[0]} to ${limits[1]}`
         problems.push(`${where}: ${dotted} takes ${want} arguments, given ${count}`)
+        continue
       }
+      const wants = api.params[dotted] ?? []
+      argumentSlices(body, open).forEach(([start, end], at) => {
+        const want = wants[at]
+        const got = guessType(src.slice(start, end))
+        if (want && want !== 'any' && got && got !== want) {
+          problems.push(`${where}: ${dotted} wants ${article(want)} at argument ${at + 1}, given ${article(got)}`)
+        }
+      })
       continue
     }
     if (api.calls[dotted]) continue
